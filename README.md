@@ -1,57 +1,27 @@
-# Set number of threads to 1 to avoid KMeans memory leak on Windows (MKL issue)
-import os
-os.environ["OMP_NUM_THREADS"] = "1"
+# Customer Segmentation with K-Means
 
-# Imports
-import pandas as pd
-import numpy as np
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans
-from sklearn.decomposition import PCA
-import matplotlib.pyplot as plt
+This project performs customer segmentation using **K-Means clustering** and **PCA** for visualization. It processes customer data (or generates a sample dataset if none exists), handles preprocessing and encoding, scales features, clusters customers into 5 groups, and visualizes the clusters in 2D.
 
-# Load or Create Dataset
-filename = 'customer_data.csv'
-if not os.path.exists(filename):
-    print(f"File '{filename}' not found. Creating a sample dataset.")
-    np.random.seed(42)
-    sample_data = pd.DataFrame({
-        'Age': np.random.randint(18, 70, 200),
-        'Income': np.random.randint(20000, 120000, 200),
-        'SpendingScore': np.random.randint(1, 100, 200),
-        'Gender': np.random.choice(['Male', 'Female'], 200)
-    })
-    sample_data.to_csv(filename, index=False)
-    data = sample_data
-else:
-    data = pd.read_csv(filename)
+> 🧠 Helps businesses understand customer groups to improve marketing and sales strategies.
 
-# Preprocessing
-data.ffill(inplace=True)  # Forward-fill missing values
-data = pd.get_dummies(data)  # Convert categorical to numeric
+---
 
-# Scale the data
-scaler = StandardScaler()
-scaled_data = scaler.fit_transform(data)
+## Features
 
-# Apply K-Means Clustering
-kmeans = KMeans(n_clusters=5, random_state=42, n_init=10)
-data['Cluster'] = kmeans.fit_predict(scaled_data)
+- Loads existing customer data or creates a sample dataset
+- Handles missing values with forward-fill
+- Encodes categorical features (e.g., Gender) using one-hot encoding
+- Scales features with `StandardScaler`
+- Applies K-Means clustering with 5 clusters
+- Visualizes clusters using PCA in a 2D scatter plot
+- Saves clustered data with assigned cluster labels to CSV
 
-# Reduce dimensions using PCA for visualization
-pca = PCA(n_components=2)
-pca_components = pca.fit_transform(scaled_data)
+---
 
-# Plot the clusters
-plt.figure(figsize=(10, 6))
-plt.scatter(pca_components[:, 0], pca_components[:, 1], c=data['Cluster'], cmap='viridis', s=50)
-plt.title('Customer Segmentation using K-Means Clustering')
-plt.xlabel('PCA Component 1')
-plt.ylabel('PCA Component 2')
-plt.colorbar(label='Cluster')
-plt.grid(True)
-plt.show()
+## Getting Started
 
-# Save the segmented data
-data.to_csv('segmented_customers.csv', index=False)
-print("Segmented data saved to 'segmented_customers.csv'.")
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Johnsondataeverywhere/customer-segmentation.git
+cd customer-segmentation
