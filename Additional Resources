@@ -1,0 +1,9 @@
+# Saving the plot as an image
+plt.figure(figsize=(10, 6))
+plt.scatter(pca_components[:, 0], pca_components[:, 1], c=data['Cluster'], cmap='viridis', s=50)
+plt.title('Customer Segmentation using K-Means Clustering')
+plt.xlabel('PCA Component 1')
+plt.ylabel('PCA Component 2')
+plt.colorbar(label='Cluster')
+plt.grid(True)
+plt.savefig('segmented_customers_plot.png')  # Save the plot as an image
